@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<h1>สวัสดีครับ</h1>
+<table style="border:solid 1px black;">
+    <thead>
+    <tr><th>1</th><th>2</th><th>3</th></tr>
+    </thead>
+    <tbody><tr><td>เนื้อหา1</td><td>เนื้อหา2</td><td>เนื้อหา3</td></tr></tbody>
+</table>
+{% for test in dataquery %}
+{{ test.name }}
+    {{ test.address }}
+    {{ test.order }}
+    <hr>
+{% endfor %}
+<script>
+    window.print();
+</script>
+</body>
+</html>

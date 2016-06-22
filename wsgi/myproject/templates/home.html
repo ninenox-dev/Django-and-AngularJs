@@ -1,0 +1,456 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html ng-app="ngApp">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>ตัวอย่างการใช้งาน Django,Angularjs และ Bootstrap</title>
+
+
+
+    <link href="{% static 'css/bootstrap.min.css' %}"  rel="stylesheet" media="screen">
+    <link href="{% static 'css/carousel.css' %}"  rel="stylesheet" >
+    <script src="{%  static 'js/jquery-1.11.3.min.js' %}"></script>
+    <script src="{%  static 'js/jquery-ui.min.js' %}"></script>
+    <script src="{%  static 'js/angular.min.js' %}"></script>
+    <script src="{%  static 'js/bootstrap.min.js' %}"></script>
+
+
+    <script type="text/javascript">
+        var loadLogin = function(){
+        $('#modalLogin').modal('show');
+    };
+    $(window).load(loadLogin);
+
+</script>
+</head>
+<body  ng-controller="myCtrl1" data-ng-init="init()">
+
+<div class="container">
+
+{% if perms.myapp.change_customer %}
+    <!--สามารถแก้ไขข้อมูล customer ได้ -->
+{% else %}
+    <!-- not change customer-->
+{% endif %}
+{% if not user.is_authenticated %}
+<!-- modal login --->
+<!-- Modal -->
+<div id="modalLogin" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-sm">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+
+      <div class="modal-body">
+
+    <div>
+        <form class="form-signin">{% csrf_token %}
+        <h2 class="form-signin-heading">เข้าสู่ระบบ</h2>
+        <label for="inputUsername" class="sr-only">Email address</label>
+        <input type="text" id="userName" ng-model="signinUsername" class="form-control" placeholder="Username" required autofocus><br>
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input type="password" ng-model="signinPassword" id="inputPassword" class="form-control" placeholder="Password" required>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" value="remember-me"> Remember me
+          </label>
+        </div>
+        <button class="btn btn-lg btn-primary btn-block" type="submit" ng-click="signin()">Sign in</button>
+
+      </form>
+        <div class="alert-danger" id="failLogin" ><h3>{% verbatim %}{{ failLogin }}{% endverbatim %}</h3></div>
+
+</div>
+
+      </div>
+
+    </div>
+
+  </div>
+</div>
+<!-- end modal login -->
+{% endif %}
+ <!-- Carousel
+    ================================================== -->
+    <div id="myCarousel" class="carousel slide" data-ride="carousel">
+      <!-- Indicators -->
+      <ol class="carousel-indicators">
+        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+        <li data-target="#myCarousel" data-slide-to="1"></li>
+
+      </ol>
+      <div class="carousel-inner" role="listbox">
+        <div class="item active">
+          <img class="first-slide" src="{%  static 'img/django.jpg' %}" style="height:500px;" alt="First slide">
+          <div class="container">
+            <div class="carousel-caption">
+              <h1>DJANGO</h1>
+              <p>django คืออะไรหากท่านลองค้นหารูปภาพในกูเกิ้ลก็จะเห็นว่ามีรูปพระเอกคาวบอยโผล่ขึ้นมา ถูกต้องแล้วครับนั่นไม่ใช่ความหมายของเรา(อ้าวยังไงพูดให้งง ฮ่าๆ) ผลการค้นหาที่ได้นั้นเป็นหนังเรื่อง django ซึ่งไม่เกี่ยวกับสิ่งที่เรากำลังจะมาเรียนรู้กันนะครับ django ในที่นี้คือ web framework แบบ full stack ที่สร้างด้วยภาษา python ครับ ตัวอย่างการรันคำสั่งภาษาไพทอน <code>python helloworld.py</code> ซึ่งสนับสนุนระบบแบบ MVC เช่นเดียวกับ framework ชื่อดังอื่นๆนะครับ .</p>
+              <p><a class="btn btn-lg btn-primary" href="https://www.djangoproject.com/" role="button">Learn more...</a></p>
+            </div>
+          </div>
+        </div>
+        <div class="item">
+          <img class="second-slide" src="{%  static 'img/angularjs.jpg' %}" style="height:500px" alt="Second slide">
+          <div class="container">
+            <div class="carousel-caption">
+              <h1>Angularjs</h1>
+              <p>angularjs หรือ ng คือ javascript ที่ใช้ในการสร้าง framework ของ javascript เพื่อนำมาใช้งานในส่วนต่างๆของเว็บไซต์ ช่วยลดเวลาในการเขียนโค้ดลงได้เยอะเลยครับ ที่สำคัญ google สนับสนุนอยู่นะครับ.</p>
+              <p><a class="btn btn-lg btn-primary" href="https://angularjs.org/" role="button">Learn more...</a></p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+      </a>
+      <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+      </a>
+    </div><!-- /.carousel -->
+<!-- show data after login -->
+{% if user.is_authenticated %}
+    <div class="alert alert-success">Welcome, <span style="color:red;">{{ user.username }}.</span> Thanks for logging in. / <a href="/logout/">logout.</a></div>
+
+{% else %}
+    <div class="alert alert-warning">Welcome, new user. Please <a href="#" onclick="loadLogin()">log in.</a></div>
+{% endif %}
+<!-- -->
+<div class="jumbotron">
+    <h2>ตัวอย่างการใช้งาน Django + Angularjs + Bootstrap ต้องล็อกอินถึงเห็นระบบตัวอย่างนะครับ <div><p style="text-align:center;">username : test</p> <p style="text-align:center;">password : test</p></div></h2>
+</div>
+
+{% if user.is_authenticated %}
+    <!-- Trigger the modal with a button -->
+  <button type="button" class="btn btn-success btn-lg" ng-click="showCustomer()"><i class="glyphicon glyphicon-list-alt"></i> ดูข้อมูลลูกค้า</button> <button type="button" class="btn btn-success btn-lg" ng-click="showUser()"><i class="glyphicon glyphicon-user"></i> รายชื่อสมาชิก</button> <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#myModal"><i class="glyphicon glyphicon-plus"></i> เพิ่มข้อมูลลูกค้า</button>
+<br>
+    <div class="text-right"><label><i class="glyphicon glyphicon-search"></i> : <input ng-model="searchText"></label></div>
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">ข้อมูลลูกค้า</h4>
+        </div>
+        <div class="modal-body">
+         <form role="form" enctype="multipart/form-data" id="myform">
+    <p>ชื่อ-นามสกุล: <input type="text" name="name" id="name" class="form-control" ng-model="name"></p>
+    <p>ที่อยู่: <textarea name="address" id="address" class="form-control" ng-model="address"></textarea></p>
+    <p>สั่งซื้อ: <select name="order" class="form-control" id="order" ng-model="order">
+        <option name="1">สินค้า 1</option>
+        <option name="2">สินค้า 2</option>
+    </select></p>
+         <p>รูป:(ขนาดสูงสุด 1 Mb) <input type="file" name="file" file="file" accept="image/*"></p>
+           <p>วันที่: <input calendar ng-model="orderdate" name="orderdate_date"></p> {% verbatim %}
+
+    <button class="btn btn-success" type='submit' ng-click="httpfunction()" data-dismiss="modal">บันทึก</button>
+</form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+             <!-- content display result --->
+<table class="table" ng-hide="tableUser">
+<thead><tr class="success"><th>username</th></tr></thead>
+
+<tbody><tr ng-repeat="myuser in users | filter:searchText"><td>{{ myuser.username }}</td></tr></tbody>
+
+</table>
+<table class="table" ng-hide="tableCustomer">
+    <thead>
+    <tr class="success">
+        <th>ลำดับ</th>
+        <th>id</th>
+        <th>ชื่อ-นามสกุล</th>
+        <th>ที่อยู่</th>
+        <th>สินค้าที่ซื้อ</th>
+        <th>วันที่</th>
+        <th>รูป</th>
+        <th>คำสั่ง</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    <tr ng-repeat="customer in responsedata | filter:searchText"><td>{{ $index+1 }}</td><td>[{{ customer.pk }}]</td><td>{{ customer.fields.name }}</td><td>{{ customer.fields.address }}</td><td>{{ customer.fields.order }}</td><td>{{ customer.fields.order_date }}</td><td>{% endverbatim %}<img style="width:200px;height:200px;" src="{%  static '' %}{% verbatim %}{{ customer.fields.image }}{% endverbatim %}"></td><td>
+        <!-- Trigger the modal with a button -->
+             {% verbatim %}
+<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal{{ $index }}" >แก้ไข</button>
+
+<!-- Modal -->
+<div id="myModal{{ $index }}" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">แก้ไขข้อมูล</h4>
+      </div>
+      <div class="modal-body">
+        <form role="form">
+    <p>ชื่อ-นามสกุล: <input type="text" name="name" id="editname" class="form-control" ng-model="customer.fields.name "></p>
+    <p>ที่อยู่: <textarea name=""address class="form-control" id="editaddress" ng-model="customer.fields.address"></textarea></p>
+    <p>สั่งซื้อ: <select name="order" class="form-control" ng-model="customer.fields.order">
+        <option name="1">สินค้า 1</option>
+        <option name="2">สินค้า 2</option>
+    </select></p>
+ <p>วันที่: <input calendar ng-model="customer.fields.order_date"></p>
+
+
+    <button class="btn btn-success" type='submit' ng-click="customerupdate(customer)" class="close" data-dismiss="modal">บันทึก</button>
+</form>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+
+<button type="button" class="btn btn-danger btn-lg" ng-click="deletecustomer(customer.pk)">ลบ</button>
+{% endverbatim %}
+    </td></tr>
+
+    </tbody>
+</table>
+    <!-- end content result -->
+ {% endif %}
+{% verbatim %}
+{{ show }}
+{{ status }}
+    {{ xxx }}
+
+<div class="alert alert-info"><h2>จำนวนครั้งที่เปิดดูหน้าเพจ : {{ returncount }}</h2></div>
+{% endverbatim %}
+    <footer>
+        <p>&copy; Ninenox Develop by Django,Angularjs and Bootstrap 2015</p>
+      </footer>
+</div>
+
+<script>
+
+var app = angular.module('ngApp',[]).config(['$httpProvider', function($httpProvider){
+        $httpProvider.defaults.xsrfCookieName = 'csrftoken';
+        $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
+
+    }]);
+app.directive('file', function () {
+    return {
+        scope: {
+            file: '='
+        },
+        link: function (scope, el, attrs) {
+            el.bind('change', function (event) {
+                var file = event.target.files[0];
+                scope.file = file ? file : undefined;
+                scope.$apply();
+            });
+        }
+    };
+});
+    app.controller('myCtrl1',['$scope','$http','$timeout',function($scope,$http,$timeout){
+
+        $scope.showCustomer = function(){
+            $scope.tableCustomer = false;
+            $scope.tableUser = true;
+        }
+
+        $scope.showUser = function(){
+            $scope.tableCustomer = true;
+
+            var datauser = [{username:'test'},{username:'man'},{username:'admin'},{username:'one'}];
+            $scope.users = datauser;
+            $scope.tableUser = false;
+        }
+
+        $scope.signin = function() {
+            var dataLogin = {
+                signinUsername: $scope.signinUsername,
+                signinPassword: $scope.signinPassword
+            }
+
+            $http({
+
+                url: "/signin/",
+                method: "POST",
+                data: dataLogin,
+                headers: {
+
+                    'Content-Type': undefined,
+
+
+                }
+            }).success(function (data) {
+
+                if (data == 'success') {
+                    $('#modalLogin').modal('hide');
+                    window.location.reload();
+                }
+                if (data == 'error') {
+
+                    $scope.failLogin = "Login Fail!";
+
+                                   }
+            }).error(function (data, status) {
+
+                            });
+        }
+
+        $scope.countview = function(){
+
+            $http({url:"/recievecount/",method:"GET",params:{count:0}}).success(function(data){
+
+            $scope.returncount = data
+
+         }).error(function(data,status){
+            $scope.status = status
+            });
+
+        }
+
+        $scope.addview = function(){
+
+            $http({url:"/recievecount/",method:"GET",params:{count:1}}).success(function(data){
+
+            $scope.returncount = data
+
+         }).error(function(data,status){
+            $scope.status = status
+            });
+
+        }
+
+           $scope.customerupdate = function(customer){
+
+           $http({
+
+        url: "/update/",
+        method: "POST",
+        data: {
+                name:customer.fields.name,
+                address:customer.fields.address,
+                order:customer.fields.order,
+                order_date:customer.fields.order_date,
+                id:customer.pk,
+
+            }
+
+        }).success(function (data, status, headers, config) {
+                    $scope.responsedata = data;
+
+            //$scope.show = data; // assign  $scope.persons here as promise is resolved here
+
+
+        }).error(function (data, status, headers, config) {
+
+            $scope.status = status + ' ' + headers;
+
+        });
+        }
+
+        $scope.init = function() {
+(function update() {
+    $timeout(update, 1000);
+      $scope.countview();
+
+  }());
+$scope.tableUser=true;
+            $http({url:"/test/",method:"GET"}).success(function(data){
+            $scope.responsedata = data;
+                $scope.addview();
+
+         }).error(function(data,status){
+            $scope.status = status
+            });
+
+        }
+
+        $scope.deletecustomer = function(e){
+            $http({url:"/del/",method:"GET",params:{doing:'del',cid:e}}).success(function(data){
+                $scope.responsedata = data
+            }).error(function(data,status){
+                $scope.status = status
+            })
+
+        }
+
+        $scope.httpfunction = function(){
+
+                $http({
+
+        url: "/test/",
+                    headers: {
+                'Content-Type': 'multipart/form-data'
+            },
+        method: "POST",
+        data: {
+				name : $scope.name,
+				address : $scope.address,
+				order : $scope.order,
+                order_date : $scope.orderdate,
+                    upload: $scope.file,
+		} ,
+                    transformRequest: function (data, headersGetter) {
+                        var formData = new FormData();
+                        angular.forEach(data, function (value, key) {
+                            formData.append(key, value);
+                        });
+
+                        var headers = headersGetter();
+
+                        delete headers['Content-Type'];
+
+
+                        return formData;
+
+                    }
+        }).success(function (data, status, headers, config) {
+if(typeof data =='object')
+{
+   $scope.responsedata = data
+}
+else {
+    alert(data);
+}
+            //$scope.show = data; // assign  $scope.persons here as promise is resolved here
+
+        }).error(function (data, status, headers, config) {
+
+            $scope.status = status + ' ' + headers;
+
+        });
+
+            }
+
+            }]);
+app.directive('calendar', function () {
+            return {
+                require: 'ngModel',
+                link: function (scope, el, attr, ngModel) {
+                    $(el).datepicker({
+                        dateFormat: 'yy-mm-dd',
+                        onSelect: function (dateText) {
+                            scope.$apply(function () {
+                                ngModel.$setViewValue(dateText);
+                            });
+                        }
+                    });
+                }
+            };
+        })
+
+</script>
+
+
+</body>
+</html>
